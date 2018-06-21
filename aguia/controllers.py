@@ -1,3 +1,4 @@
+#encoding: utf-8
 from flask import Flask, render_template, request, url_for, redirect, session
 from aguia import db, app
 from aguia.models import User, Company, Bidding, Email, Category, ImportDatabase
