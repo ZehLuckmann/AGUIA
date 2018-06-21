@@ -1,0 +1,45 @@
+{% extends "template.html" %}
+{% block page_title %}Listar empresas{% endblock %}
+{% block content %}
+<table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
+<thead>
+    <tr>
+        <th>Codigo</th>
+        <th>Nome</th>
+        <th>Cidade</th>
+        <th>Estado</th>
+        <th>Email</th>
+        <th>Categoria</th>
+        <th>Ações</th>
+    </tr>
+</thead>
+<tbody>
+    {% for company in companies %}
+    <tr class="even gradeC">
+        <td>{{ company._id }}</td>
+        <td>{{ company.name }}</td>
+        <td>{{ company.city }}</td>
+        <td>{{ company.state }}</td>
+        <td>{{ company.email }}</td>
+        <td>{{ company.category }}</td>
+        <td><a href="{{url_for('delete_company', id=company._id)}}"><i class="fa fa-trash fa-fw"></i></a></td
+    </tr>
+    {% endfor %}
+</tbody>
+</table>
+<!-- /.table-responsive -->
+{% endblock %}
+
+{% block scripts%}
+<script src="{{ url_for('static', filename='vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
+<script src="{{ url_for('static', filename='vendor/datatables-plugins/dataTables.bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static', filename='vendor/datatables-responsive/dataTables.responsive.js') }}"></script>
+<!-- Page-Level Demo Scripts - Tables - Use for reference -->
+<script>
+$(document).ready(function() {
+   $('#dataTables-example').DataTable({
+       responsive: true
+   });
+});
+</script>
+{% endblock%}

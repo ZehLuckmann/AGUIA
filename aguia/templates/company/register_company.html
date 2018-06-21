@@ -1,0 +1,34 @@
+{% extends "template.html" %}
+{% block page_title %}Cadastro de Empresa{% endblock %}
+{% block title %}Cadastro de Empresa{% endblock %}
+{% block content %}
+<div class="col-lg-6">
+  <form action="{{url_for('save_company')}}" method="POST" role="form">
+    <div class="form-group">
+      <label for ="name">Nome</label>
+      <input class="form-control" placeholder="EX: Fabrica de tinta" name="name">
+
+      <label for ="city">Cidade</label>
+      <input class="form-control" placeholder="EX: Blumenau" name="city">
+
+      <label>Estado</label>
+      <select class="form-control" name="state">
+          <option value="SC">Santa Catarina</option>
+          <option value="PR">Paraná</option>
+          <option value="RS">Rio Grande do Sul</option>
+          <option value="SP">São Paulo</option>
+          <option value="RJ">Rio de Janeiro</option>
+      </select>
+
+      <label for ="email">Email</label>
+      <input class="form-control" placeholder="EX: email@teste.com" name="email">
+
+      <label for ="category">Categoria</label>
+      <input class="form-control" placeholder="EX: Materias de construção" name="category">
+
+      <hr>
+      <input type="submit" value="Salvar" class="btn btn-default"/>
+    </div>
+  </form>
+</div>
+{% endblock %}

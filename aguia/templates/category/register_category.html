@@ -1,0 +1,15 @@
+{% extends "template.html" %}
+{% block page_title %}Cadastro de Categoria{% endblock %}
+{% block title %}Cadastro de Categoria{% endblock %}
+{% block content %}
+<div class="col-lg-8">
+  <form action="{{url_for('save_category')}}" method="POST" role="form">
+    <div class="form-group">
+      <label for ="name">Nome</label>
+      <input class="form-control" placeholder="EX: Nome da categoria" name="name">
+      <hr>
+      <input type="submit" value="Enviar" class="btn btn-default"/>
+    </div>
+  </form>
+</div>
+{% endblock %}

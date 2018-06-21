@@ -1,0 +1,48 @@
+{% extends "template.html" %}
+{% block page_title %}Escrever Email{% endblock %}
+{% block title %}Escrever Email{% endblock %}
+{% block content %}
+<div class="col-lg-10">
+  <form action="{{url_for('send_email')}}" method="POST" role="form">
+    <div class="form-group">
+      <label for ="titulo">Assunto</label>
+      <input class="form-control" placeholder="" name="subject" value="{{ email.subject }}">
+
+      <label for ="text">Texto</label>
+      <textarea rows="12" name="summary" class="form-control" placeholder="" name="text" col="600">{{ email.text }}</textarea>
+
+      <hr>
+      <input type="submit" value="Enviar" class="btn btn-default"/>
+    </div>
+
+    <label for ="companies">Empresas que vão receber o email</label>
+    <table width="100%" class="table table-striped table-bordered table-hover" name="companies" id="dataTables-example">
+    <thead>
+        <tr>
+            <th>Codigo</th>
+            <th>Nome</th>
+            <th>Estado</th>
+            <th>Cidade</th>
+            <th>Email</th>
+            <th>Categoria</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for company in companies %}
+        <tr class="even gradeC">
+            <td>{{ company._id }}</td>
+            <td>{{ company.name }}</td>
+            <td>{{ company.city }}</td>
+            <td>{{ company.state }}</td>
+            <td>{{ company.email }}</td>
+            <td>{{ company.category }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+
+    <!-- /.table-responsive -->
+  </form>
+
+</div>
+{% endblock %}

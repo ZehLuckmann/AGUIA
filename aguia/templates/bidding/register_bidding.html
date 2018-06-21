@@ -1,0 +1,27 @@
+{% extends "template.html" %}
+{% block page_title %}Cadastro de Licitações{% endblock %}
+{% block title %}Cadastro de Licitações{% endblock %}
+{% block content %}
+<div class="col-lg-8">
+  <form action="{{url_for('save_bidding')}}" method="POST" role="form">
+    <div class="form-group">
+      <label for ="titulo">Título</label>
+      <input class="form-control" placeholder="EX: Título Licitação" name="title">
+
+      <label for ="resumo">Resumo</label>
+      <textarea rows="6" name="summary" class="form-control" placeholder="EX: Resumo para constar no corpo do email" name="cidade"></textarea>
+
+      <label for ="linkEdital">Link Edital</label>
+      <input class="form-control" placeholder="EX: http://linkdoedital.com.br" name="linkNotice">
+
+      <!--<label>Categorias</label>
+
+      {% for categoria in categorias %}
+      <input type="checkbox" value="{{ categoria._id }}" name="cat_{{ categoria._id }}" id="cat_{{ categoria._id }}">{{categoria.nome}}
+      {% endfor %}-->
+      <hr>
+      <input type="submit" value="Enviar" class="btn btn-default"/>
+    </div>
+  </form>
+</div>
+{% endblock %}

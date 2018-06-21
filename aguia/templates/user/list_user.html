@@ -1,0 +1,35 @@
+{% extends "template.html" %}
+{% block page_title %}Lista Usuários{% endblock %}
+{% block content %}
+<table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
+<thead>
+    <tr>
+        <th>Codigo</th>
+        <th>Usuário</th>
+    </tr>
+</thead>
+<tbody>
+    {% for user in users %}
+    <tr class="even gradeC">
+        <td>{{ user._id }}</td>
+        <td>{{ user.username }}</td>
+    </tr>
+    {% endfor %}
+</tbody>
+</table>
+<!-- /.table-responsive -->
+{% endblock %}
+
+{% block scripts%}
+<script src="{{ url_for('static', filename='vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
+<script src="{{ url_for('static', filename='vendor/datatables-plugins/dataTables.bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static', filename='vendor/datatables-responsive/dataTables.responsive.js') }}"></script>
+<!-- Page-Level Demo Scripts - Tables - Use for reference -->
+<script>
+$(document).ready(function() {
+   $('#dataTables-example').DataTable({
+       responsive: true
+   });
+});
+</script>
+{% endblock%}
