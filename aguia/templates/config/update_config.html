@@ -1,0 +1,17 @@
+{% extends "template.html" %}
+{% block page_title %}Configurações{% endblock %}
+{% block title %}Configurações{% endblock %}
+{% block content %}
+<div class="col-lg-8">
+  <form action="{{url_for('update_config')}}" method="POST" role="form">
+    <div class="form-group">
+      <label for ="email_limit">Limite de emails por ciclo:</label>
+      <input class="form-control" placeholder="EX: 10" name="email_limit" value="{{config.email_limit}}">
+      <label for ="email_cicle">Tempo de cada Ciclo:</label>
+      <input class="form-control" placeholder="EX: 60" name="email_cicle" value="{{config.email_cicle}}">
+      <hr>
+      <input type="submit" value="Enviar" class="btn btn-default"/>
+    </div>
+  </form>
+</div>
+{% endblock %}

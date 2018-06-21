@@ -1,7 +1,7 @@
 #encoding: utf-8
 from flask import Flask, render_template, request, url_for, redirect, session
 from aguia import db, app
-from aguia.models import User, Company, Bidding, Email, Category, ImportDatabase
+from aguia.models import User, Company, Bidding, Email, Category, ImportDatabase, Config
 
 def session_validate(session):
     try:
@@ -197,6 +197,16 @@ def delete_category(id):
     category = Category(id=id)
     category.delete()
     return redirect(url_for("list_category"))
+
+@app.route("/update_config", methods=['GET', 'POST'])
+def update_config():
+    config = Config()
+    if request.method == 'POST':
+        config.email_limit = request.form.get("email_limit")
+        config.email_cicle = request.form.get("email_cicle")
+        return redirect(url_for("home"))
+
+    return render_template("config/update_config.html", config=config)
 
 @app.route('/import_database', methods=['GET', 'POST'])
 def import_database():

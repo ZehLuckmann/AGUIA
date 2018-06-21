@@ -263,6 +263,33 @@ class Category(db.Model):
         db.session.delete(self)
         db.session.commit()
 
+class Config(db.Model):
+    _id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    email_limit = db.Column(db.Integer)
+    email_cicle = db.Column(db.Integer)
+
+    def __init__(self):
+        if not self.load():
+            self.email_limit = 10
+            self.email_cicle = 60
+            self.save()
+
+    def load(self):
+        config = Config.query.filter_by(_id=1).first()
+        if config:
+            self._id = config._id
+            self.email_limit = config.email_limit
+            self.email_cicle = config.email_cicle
+            return True
+        return False
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def update(self):
+        db.session.commit()
+
 class ImportDatabase():
     file = None
     def __init__(self, file):
@@ -276,7 +303,6 @@ class ImportDatabase():
             company_email = data[1]
             company_city = data[2]
             company_state = data[3]
-            #orig = data[4]
             category = data[5]
 
             new_category = Category()
