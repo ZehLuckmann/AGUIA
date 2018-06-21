@@ -14,11 +14,12 @@
       <label for ="linkEdital">Link Edital</label>
       <input class="form-control" placeholder="EX: http://linkdoedital.com.br" name="linkNotice">
 
-      <!--<label>Categorias</label>
-
-      {% for categoria in categorias %}
-      <input type="checkbox" value="{{ categoria._id }}" name="cat_{{ categoria._id }}" id="cat_{{ categoria._id }}">{{categoria.nome}}
-      {% endfor %}-->
+      <label>Categoria</label>
+      <select class="form-control" name="category">
+      {% for category in categories %}
+          <option value="{{ category._id }}">{{ category.name }}</option>
+      {% endfor %}
+      </select>
       <hr>
       <input type="submit" value="Enviar" class="btn btn-default"/>
     </div>

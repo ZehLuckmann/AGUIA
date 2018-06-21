@@ -1,0 +1,18 @@
+{% extends "template.html" %}
+{% block page_title %}Importar Informações{% endblock %}
+{% block title %}Importar Informações{% endblock %}
+{% block content %}
+<div class="col-lg-6">
+  <form action="{{url_for('import_database')}}" method="post" enctype="multipart/form-data" role="form">
+    <div class="form-group">
+
+      <div class="form-group">
+          <label for ="apelido">Apelido</label>
+          <input type="file" name="input_file" id="input_file">
+      </div>
+      <hr>
+      <input type="submit" value="Importar" class="btn btn-default"/>
+    </div>
+  </form>
+</div>
+{% endblock %}

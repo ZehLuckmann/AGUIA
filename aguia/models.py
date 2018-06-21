@@ -10,9 +10,9 @@ class Company(db.Model):
     city = db.Column(db.String)
     state = db.Column(db.String)
     email = db.Column(db.String)
-    category = db.Column(db.String)
+    category = db.Column(db.Integer)
 
-    def __init__(self, name = "", city = "", state = "", email = "", category= "", id = -1):
+    def __init__(self, name = "", city = "", state = "", email = "", category= -1, id = -1):
         if id != -1:
             self.load(id)
         else:
@@ -35,10 +35,24 @@ class Company(db.Model):
             self.state = company.state
             self.email  = company.email
             self.category = company.category
+            return True
+        return False
 
     def delete(self):
         db.session.delete(self)
         db.session.commit()
+
+    def load_by_email(self, email):
+        company = User.query.filter_by(email=email).first()
+        if company:
+            self._id = company._id
+            self.name = company.name
+            self.city = company.city
+            self.state = company.state
+            self.email  = company.email
+            self.category = company.category
+            return True
+        return False
 
 class User(db.Model):
     __tablename__ = "user"
@@ -76,6 +90,8 @@ class User(db.Model):
             self.username = user.username
             self.password = user.password
             self.email = user.email
+            return True
+        return False
 
     def delete(self):
         db.session.delete(self)
@@ -89,26 +105,38 @@ class Bidding(db.Model):
     title = db.Column(db.String)
     summary = db.Column(db.String)
     link_notice = db.Column(db.String)
+    category = db.Column(db.Integer)
+    date = db.Column(db.String)
+    time = db.Column(db.String)
 
-    def __init__(self, title ="", summary="", link_notice="", id =-1):
+
+    def __init__(self, title="", summary="", link_notice="", category=-1, id=-1):
         if id != -1:
             self.load(id)
         else:
             self.title = title
             self.summary = summary
             self.link_notice = link_notice
+            self.category = category
+            self.date = time.strftime("%d/%m/%Y")
+            self.time = time.strftime("%H:%M:%S")
 
     def save(self):
         db.session.add(self)
         db.session.commit()
 
     def load(self, id):
-        bidding = User.query.filter_by(_id=id).first()
+        bidding = Bidding.query.filter_by(_id=id).first()
         if bidding:
             self._id = bidding._id
             self.title = bidding.title
             self.summary = bidding.summary
             self.link_notice = bidding.link_notice
+            self.category = bidding.category
+            self.date = bidding.date
+            self.time = bidding.time
+            return True
+        return False
 
     def delete(self):
         db.session.delete(self)
@@ -153,6 +181,8 @@ class Email(db.Model):
             self.subject = email.subject
             self.text = email.text
             self.id_bidding = email.id_bidding
+            return True
+        return False
 
     def delete(self):
         db.session.delete(self)
@@ -185,10 +215,12 @@ class EmailHistory(db.Model):
         email_history = EmailHistory.query.filter_by(_id=id).first()
         if email_history:
             self._id = email_history._id
-            self.title = email_history.id_email
-            self.summary = email_history.id_company
-            self.link_notice = email_history.date
+            self.id_email = email_history.id_email
+            self.id_company = email_history.id_company
+            self.date = email_history.date
             self.time = email_history.time
+            return True
+        return False
 
     def delete(self):
         db.session.delete(self)
@@ -216,7 +248,48 @@ class Category(db.Model):
         if category:
             self._id = category._id
             self.name = category.name
+            return True
+        return False
+
+    def load_by_name(self, name):
+        category = Category.query.filter_by(name=name).first()
+        if category:
+            self._id = category._id
+            self.name = category.name
+            return True
+        return False
 
     def delete(self):
         db.session.delete(self)
         db.session.commit()
+
+class ImportDatabase():
+    file = None
+    def __init__(self, file):
+        self.file = file
+
+    def start(self):
+        for register in self.file.read().splitlines():
+            data = register.decode("utf-8").split(",")
+            print(data)
+            company = data[0]
+            company_email = data[1]
+            company_city = data[2]
+            company_state = data[3]
+            #orig = data[4]
+            category = data[5]
+
+            new_category = Category()
+            if not new_category.load_by_name(category):
+                new_category.name = category
+                new_category.save()
+                new_category.load_by_name(category)
+
+            new_company = Company()
+            if not new_company.load_by_email(company_email):
+                new_company.name = company
+                new_company.email = company_email
+                new_company.city = company_city
+                new_company.state = company_state
+                new_company.category = new_category._id
+                new_company.save()

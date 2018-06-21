@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, url_for, redirect, session
 from aguia import db, app
-from aguia.models import User, Company, Bidding, Email, Category
+from aguia.models import User, Company, Bidding, Email, Category, ImportDatabase
 
 def session_validate(session):
     try:
@@ -14,6 +14,9 @@ def session_validate(session):
 
 @app.route("/")
 def index():
+    if session_validate(session):
+        return redirect(url_for("home"))
+
     return render_template("index.html")
 
 @app.route("/home")
@@ -25,6 +28,9 @@ def home():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    if session_validate(session):
+        return redirect(url_for("home"))
+
     if request.method == "POST":
         user = User(username = request.form.get("username"), password = request.form.get("password"))
         if user.login():
@@ -85,7 +91,8 @@ def update_user():
 
 @app.route("/register_company")
 def register_company():
-    return render_template("company/register_company.html")
+    categories = Category.query.all()
+    return render_template("company/register_company.html", categories=categories)
 
 @app.route("/save_company", methods=["GET", "POST"])
 def save_company():
@@ -97,7 +104,7 @@ def save_company():
         email = request.form.get("email"),
         category = request.form.get("category"))
         company.save()
-        return redirect(url_for("list-company"))
+        return redirect(url_for("list_company"))
 
 
 @app.route("/list_company")
@@ -115,8 +122,8 @@ def delete_company(id):
 
 @app.route("/register_bidding")
 def register_bidding():
-    bidding = Bidding.query.all()
-    return render_template("bidding/register_bidding.html", biddings=biddings)
+    categories = Category.query.all()
+    return render_template("bidding/register_bidding.html", categories=categories)
 
 @app.route("/save_bidding", methods=["GET", "POST"])
 def save_bidding():
@@ -127,7 +134,7 @@ def save_bidding():
         link_notice = request.form.get("linkNotice"),
         category = request.form.get("category"))
         bidding.save()
-        return redirect(url_for("lista_licitacoes"))
+        return redirect(url_for("list_bidding"))
 
 
 @app.route("/list_bidding")
@@ -146,7 +153,7 @@ def delete_bidding(id):
 
 
 @app.route("/write_email/<int:id_bidding>", methods=["GET", "POST"])
-def escrever_email(id_bidding):
+def write_email(id_bidding):
     if not session_validate(session):
         return redirect(url_for("login"))
 
@@ -189,3 +196,22 @@ def delete_category(id):
     category = Category(id=id)
     category.delete()
     return redirect(url_for("list_category"))
+
+@app.route('/import_database', methods=['GET', 'POST'])
+def import_database():
+    errors = []
+    file_title = "Nenhum arquivo selecionado"
+    if request.method == 'POST':
+        if 'input_file' not in request.files:
+            errors.append("Arquivo de entrada precisa ser informado")
+        else:
+            file = request.files['input_file']
+            if file.filename == '':
+                errors.append("Arquivo de entrada inválido")
+
+        if (len(errors) == 0):
+            import_database = ImportDatabase(file)
+            import_database.start()
+
+    print(errors)
+    return render_template("config/import_database.html")

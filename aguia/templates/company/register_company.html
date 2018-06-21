@@ -23,9 +23,12 @@
       <label for ="email">Email</label>
       <input class="form-control" placeholder="EX: email@teste.com" name="email">
 
-      <label for ="category">Categoria</label>
-      <input class="form-control" placeholder="EX: Materias de construção" name="category">
-
+      <label>Categoria</label>
+      <select class="form-control" name="category">
+      {% for category in categories %}
+          <option value="{{ category._id }}">{{ category.name }}</option>
+      {% endfor %}
+      </select>
       <hr>
       <input type="submit" value="Salvar" class="btn btn-default"/>
     </div>
